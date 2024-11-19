@@ -1,0 +1,170 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<script>
+    // console.log(1)
+    // console.log(2)
+    // setTimeout(() =>{
+    //     console.log("run 3s")
+    // }, 3000)
+    // console.log(3)
+    // console.log(4)
+
+    function callback(error, data) {
+        if (error) {
+            console.log("something wrong", error);
+        } else {
+            console.log("my data ", data);
+        }
+    }
+    // function gettodo(callback){
+    //     var request = new XMLHttpRequest();
+    //     request.onreadystatechange = function(){
+
+    //     if (this.readyState === 4 && request.status === 200){
+    //         console.log('>>> check res:', request);
+    //         const data = JSON.parse(request.responseText);
+    //         const datastring = JSON.stringify(data);
+    //         callback(undefined, data);
+    //         callback(undefined, datastring);
+    //         callback(undefined, request.responseText);
+    //     }
+    //     if (this.readyState === 4 && request.status !== 200){
+    //         callback('something wrong', undefined);
+
+    //     }
+    // };
+    // request.open("GET", "http://localhost/data.json", true);
+    // request.send();
+
+    // }
+    // console.log(1);
+    // console.log(2);
+    // gettodo(callback);
+    // console.log(3);
+    // console.log(4);
+
+
+    function gettodo() {
+        return new Promise((resolve, reject) => {
+
+            var request = new XMLHttpRequest();
+            request.onreadystatechange = function () {
+
+                if (this.readyState === 4 && request.status === 200) {
+                    console.log('>>> check res:', request);
+                    const data = JSON.parse(request.responseText);
+                    resolve(data);
+
+                }
+                if (this.readyState === 4 && request.status !== 200) {
+                    reject('something went wrongs')
+                }
+            };
+            request.open("GET", "http://localhost/data.json", true);
+            request.send();
+        })
+    }
+
+    gettodo()
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error => {
+        console.log(error);
+    })
+
+    // fetch('https://jsonplaceholder.typicode.com/todos/1')
+    // .then(Response =>{
+    //     return Response.json()
+    // })
+    // .then(data => {
+    //     console.log(' fetch data', data) 
+    // })
+
+    const promiseExp = () => {
+        return new Promise((resolve, reject) => {
+            // resolve('get some data')
+            resolve({ name: 'huy', age: 22 })
+            // reject('some thing wrong')
+
+        });
+    }
+    // promiseExp()
+    // .then(data => {
+    //     console.log(data)
+    // })
+    // .catch(error =>{
+    //     console.log(error)
+    // });
+
+    const getnewtodo = async (id) => {
+        try {
+            let respone = await fetch(`https://jsonplaceholder.typicode.com/todos/${id}`);
+            if (respone && respone.status !== 200) {
+                throw new Error('something wrongs with status code ' + respone.status)
+                // reject
+            }
+            let data = await respone.json();
+            return data; // resolve
+
+        } catch (error) {
+
+            console.log('>>>> check catch error', e.message)
+        }
+
+    }
+    getnewtodo('jijij')
+        .then(data => {
+            console.log('>>> data ', data)
+        })
+        .catch(error => {
+            console.log('>>> check error: ', error.message)
+        })
+
+
+    let arr1 = [1, 2, 3, 4, 5]
+    console.log(arr1)
+    console.log(arr1.push(6))
+    let arr2 = [...arr1]
+    console.log("arr2", arr2)
+    let arr3 = [...arr1, 7]
+    console.log("arr3", arr3)
+    let arr4 = [0, ...arr1, 7]
+    console.log("arr4", arr4)
+    let ob = { name: "huy", address: "hcm city" }
+    let obc = { ...ob }
+    console.log(obc)
+    let obcd = { age: 22, ...ob, class: "dh20it02" }
+    console.log(obcd)
+    let state = { name: "huypham", age: 22, address: "long an" }
+    // let name = state.name;
+    // let age = state.age;
+    // let address = state.address;
+    let { name, age, address } = state;
+    console.log("<<<< check", name, age, address)
+    let a, b;
+    [a, b] = [1, 2];
+    console.log(a, b); // 1 2
+    let array = ["huypham", "cntt"];
+    let [names, majors] = array;
+    console.log(names, majors);
+
+
+</script>
+
+<body>
+    <h1>hello world</h1>
+</body>
+
+</html>
+
+<!-- khi tính toán mất nhiều thời gian thì ta sẽ dùng call back và để xử lí bất đồng bộ -->
+<!-- sử dụng promise để viết code như đồng bộ chạy từng dòng một từ trên xuống -->
+<!-- fetch api thường dùng method get để lấy data  -->
+<!-- axios cũng dùng để CRUD data -->
+<!-- gọi fetch trả ra một cái promise then, catch -->
